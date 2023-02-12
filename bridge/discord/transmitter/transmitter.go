@@ -20,6 +20,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/42wim/matterbridge/bridge"
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
 )
@@ -36,7 +37,7 @@ type Transmitter struct {
 
 	mutex sync.RWMutex
 
-	Log *log.Entry
+	Log *bridge.GatedLogger
 }
 
 // ErrWebhookNotFound is returned when a valid webhook for this channel/message combination does not exist
@@ -58,7 +59,7 @@ func New(session *discordgo.Session, guild string, title string, autoCreate bool
 
 		channelWebhooks: make(map[string]*discordgo.Webhook),
 
-		Log: log.NewEntry(log.StandardLogger()),
+		Log: &bridge.GatedLogger{Entry: *log.NewEntry(log.StandardLogger())},
 	}
 }
 

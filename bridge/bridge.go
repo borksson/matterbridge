@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
+
 	"github.com/42wim/matterbridge/bridge/config"
-	"github.com/sirupsen/logrus"
 )
 
 type Bridger interface {
@@ -27,7 +27,8 @@ type Bridge struct {
 	Channels       map[string]config.ChannelInfo
 	Joined         map[string]bool
 	ChannelMembers *config.ChannelMembers
-	Log            *logrus.Entry
+	// TODO: Overide logger so that log data can be sent to a gateway
+	Log            *GatedLogger
 	Config         config.Config
 	General        *config.Protocol
 }
