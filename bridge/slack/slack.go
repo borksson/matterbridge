@@ -85,6 +85,7 @@ func newBridge(cfg *bridge.Config) *Bslack {
 	if err != nil {
 		cfg.Log.Fatalf("Could not create LRU cache for Slack bridge: %v", err)
 	}
+	cfg.Log.Info("THIS LOG CAME FROM THE SLACK BRIDGE")
 	b := &Bslack{
 		Config: cfg,
 		uuid:   xid.New().String(),
