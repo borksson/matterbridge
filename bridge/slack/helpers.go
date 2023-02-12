@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/42wim/matterbridge/bridge"
 	"github.com/42wim/matterbridge/bridge/config"
-	"github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 )
 
@@ -244,7 +244,7 @@ func (b *Bslack) getUsersInConversation(channelID string) ([]string, error) {
 	return channelMembers, nil
 }
 
-func handleRateLimit(log *logrus.Entry, err error) error {
+func handleRateLimit(log *bridge.GatedLogger, err error) error {
 	rateLimit, ok := err.(*slack.RateLimitedError)
 	if !ok {
 		return err

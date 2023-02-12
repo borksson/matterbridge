@@ -7,15 +7,15 @@ import (
 	"sync"
 	"time"
 
+	"github.com/42wim/matterbridge/bridge"
 	"github.com/42wim/matterbridge/bridge/config"
-	"github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 )
 
 const minimumRefreshInterval = 10 * time.Second
 
 type users struct {
-	log *logrus.Entry
+	log *bridge.GatedLogger
 	sc  *slack.Client
 
 	users           map[string]*slack.User
@@ -27,7 +27,7 @@ type users struct {
 	refreshMutex      sync.Mutex
 }
 
-func newUserManager(log *logrus.Entry, sc *slack.Client) *users {
+func newUserManager(log *bridge.GatedLogger, sc *slack.Client) *users {
 	return &users{
 		log:             log,
 		sc:              sc,
@@ -177,7 +177,7 @@ func (b *users) populateUsers(wait bool) {
 }
 
 type channels struct {
-	log *logrus.Entry
+	log *bridge.GatedLogger
 	sc  *slack.Client
 
 	channelsByID   map[string]*slack.Channel
@@ -192,7 +192,7 @@ type channels struct {
 	refreshMutex      sync.Mutex
 }
 
-func newChannelManager(log *logrus.Entry, sc *slack.Client) *channels {
+func newChannelManager(log *bridge.GatedLogger, sc *slack.Client) *channels {
 	return &channels{
 		log:             log,
 		sc:              sc,

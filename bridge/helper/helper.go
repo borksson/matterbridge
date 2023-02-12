@@ -13,11 +13,11 @@ import (
 
 	"golang.org/x/image/webp"
 
+	"github.com/42wim/matterbridge/bridge"
 	"github.com/42wim/matterbridge/bridge/config"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
-	"github.com/sirupsen/logrus"
 )
 
 // DownloadFile downloads the given non-authenticated URL.
@@ -145,7 +145,7 @@ func GetAvatar(av map[string]string, userid string, general *config.Protocol) st
 
 // HandleDownloadSize checks a specified filename against the configured download blacklist
 // and checks a specified file-size against the configure limit.
-func HandleDownloadSize(logger *logrus.Entry, msg *config.Message, name string, size int64, general *config.Protocol) error {
+func HandleDownloadSize(logger *bridge.GatedLogger, msg *config.Message, name string, size int64, general *config.Protocol) error {
 	// check blacklist here
 	for _, entry := range general.MediaDownloadBlackList {
 		if entry != "" {
@@ -173,12 +173,12 @@ func HandleDownloadSize(logger *logrus.Entry, msg *config.Message, name string, 
 }
 
 // HandleDownloadData adds the data for a remote file into a Matterbridge gateway message.
-func HandleDownloadData(logger *logrus.Entry, msg *config.Message, name, comment, url string, data *[]byte, general *config.Protocol) {
+func HandleDownloadData(logger *bridge.GatedLogger, msg *config.Message, name, comment, url string, data *[]byte, general *config.Protocol) {
 	HandleDownloadData2(logger, msg, name, "", comment, url, data, general)
 }
 
 // HandleDownloadData adds the data for a remote file into a Matterbridge gateway message.
-func HandleDownloadData2(logger *logrus.Entry, msg *config.Message, name, id, comment, url string, data *[]byte, general *config.Protocol) {
+func HandleDownloadData2(logger *bridge.GatedLogger, msg *config.Message, name, id, comment, url string, data *[]byte, general *config.Protocol) {
 	var avatar bool
 	logger.Debugf("Download OK %#v %#v", name, len(*data))
 	if msg.Event == config.EventAvatarDownload {

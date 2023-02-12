@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/sirupsen/logrus"
+	"github.com/42wim/matterbridge/bridge"
 )
 
 // CanConvertTgsToX Checks whether the external command necessary for ConvertTgsToX works.
@@ -21,7 +21,7 @@ func CanConvertTgsToX() error {
 
 // ConvertTgsToWebP convert input data (which should be tgs format) to WebP format
 // This relies on an external command, which is ugly, but works.
-func ConvertTgsToX(data *[]byte, outputFormat string, logger *logrus.Entry) error {
+func ConvertTgsToX(data *[]byte, outputFormat string, logger *bridge.GatedLogger) error {
 	// lottie can't handle input from a pipe, so write to a temporary file:
 	tmpInFile, err := ioutil.TempFile(os.TempDir(), "matterbridge-lottie-input-*.tgs")
 	if err != nil {

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/42wim/matterbridge/bridge"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,9 +23,9 @@ func TestExtractTopicOrPurpose(t *testing.T) {
 		"error - unhandled":      {"some unmatched message", "unknown", ""},
 	}
 
-	logger := logrus.New()
+	logger := log.New()
 	logger.SetOutput(ioutil.Discard)
-	cfg := &bridge.Config{Bridge: &bridge.Bridge{Log: logrus.NewEntry(logger)}}
+	cfg := &bridge.Config{Bridge: &bridge.Bridge{Log: &bridge.GatedLogger{Entry: *log.NewEntry(log.StandardLogger())}}}
 	b := newBridge(cfg)
 	for name, tc := range testcases {
 		gotChangeType, gotOutput := b.extractTopicOrPurpose(tc.input)
